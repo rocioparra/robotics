@@ -119,102 +119,111 @@ im_q1 = im_hoja(1:(size_hoja(1)/4),(3*size_hoja(2)/4):size_hoja(2));
 im_q2 = im_hoja(1:(size_hoja(1)/2),1:(size_hoja(2)/2));
 im_q3 = im_hoja((size_hoja(1)/2):size_hoja(1),1:(size_hoja(2)/2));
 im_q4 = im_hoja((3*size_hoja(1)/4):size_hoja(1),(3*size_hoja(2)/4):size_hoja(2));
-% Vi que se puede con blobs (para Ari): 
+% Se puede con blobs (para Ari): 
 % - Si hay dos, es solo el fondo y la esquina
 % - Si hay mas de dos, hay alguna parte del triangulo y hay que achicar el
 % cuadrante (ir recortando a la mitad del anterior)
 hoja_borders = [0 0 0 0;0 0 0 0];
 
-
 % Regular threshold hasta que haya al menos 2 lineas
 % Despues con el suppress se recorta lo que encontro
 % Q2
-imlin_q2=Hough(im_q2);
-figure();
-idisp(im_q2)
-imlin_q2.houghThresh=0.9;
-imlin_q2.plot
-imlin_q2.suppress = 15;
-figure();
-idisp(im_q2)
-imlin_q2.plot
-lineas_q2=imlin_q2.lines;
-
-imlinea1_q2=generarlinea(lineas_q2(1).rho,lineas_q2(1).theta,size(im_q2,2),size(im_q2,1));
-imlinea2_q2=generarlinea(lineas_q2(2).rho,lineas_q2(2).theta,size(im_q2,2),size(im_q2,1));
-
-figure();
-idisp(im_q2.*imlinea1_q2+im_q2.*imlinea2_q2)
-
-bordes_q2=(imlinea1_q2+imlinea2_q2)==2;
-[fil_q2,col_q2]=find(bordes_q2);
+% imlin_q2=Hough(im_q2);
+% figure();
+% idisp(im_q2)
+% imlin_q2.houghThresh=0.9;
+% imlin_q2.plot
+% imlin_q2.suppress = 15;
+% figure();
+% idisp(im_q2)
+% imlin_q2.plot
+% lineas_q2=imlin_q2.lines;
+% 
+% imlinea1_q2=generarlinea(lineas_q2(1).rho,lineas_q2(1).theta,size(im_q2,2),size(im_q2,1));
+% imlinea2_q2=generarlinea(lineas_q2(2).rho,lineas_q2(2).theta,size(im_q2,2),size(im_q2,1));
+% 
+% figure();
+% idisp(im_q2.*imlinea1_q2+im_q2.*imlinea2_q2)
+% 
+% bordes_q2=(imlinea1_q2+imlinea2_q2)==2;
+% [fil_q2,col_q2]=find(bordes_q2);
+[fil_q2,col_q2] = get_Q_border(im_q2);
+% Los offset salen de la funcion que tiene que hacer Ari, 
+% junto con los cuadrantes
 hoja_borders(:,2) = [col_q2;fil_q2]; % Recordar que va u - v
 
 % Q1 - Aca tome un cuadrante menor, chequear con las lineas si hay que
 % achicarlo
-imlin_q1=Hough(im_q1);
-figure();
-idisp(im_q1)
-imlin_q1.houghThresh=0.6; % Lo baje de a 0.1 hasta encontrar con los dos bordes
-imlin_q1.plot
-imlin_q1.suppress = 25; % Lo subi de a 5 una vez que hubo una linea de cada
-figure();
-idisp(im_q1)
-imlin_q1.plot
-lineas_q1=imlin_q1.lines;
+% imlin_q1=Hough(im_q1);
+% figure();
+% idisp(im_q1)
+% imlin_q1.houghThresh=0.65; % Lo baje de a 0.05 hasta encontrar con los dos bordes
+% imlin_q1.plot
+% imlin_q1.suppress = 15;
+% figure();
+% idisp(im_q1)
+% imlin_q1.plot
+% lineas_q1=imlin_q1.lines;
+% 
+% imlinea1_q1=generarlinea(lineas_q1(1).rho,lineas_q1(1).theta,size(im_q1,2),size(im_q1,1));
+% imlinea2_q1=generarlinea(lineas_q1(2).rho,lineas_q1(2).theta,size(im_q1,2),size(im_q1,1));
+% 
+% figure();
+% idisp(im_q1.*imlinea1_q1+im_q1.*imlinea2_q1)
+% 
+% bordes_q1=(imlinea1_q1+imlinea2_q1)==2;
+% [fil_q1,col_q1]=find(bordes_q1);
+[fil_q1,col_q1] = get_Q_border(im_q1);
 
-imlinea1_q1=generarlinea(lineas_q1(1).rho,lineas_q1(1).theta,size(im_q1,2),size(im_q1,1));
-imlinea2_q1=generarlinea(lineas_q1(2).rho,lineas_q1(2).theta,size(im_q1,2),size(im_q1,1));
-
-figure();
-idisp(im_q1.*imlinea1_q1+im_q1.*imlinea2_q1)
-
-bordes_q1=(imlinea1_q1+imlinea2_q1)==2;
-[fil_q1,col_q1]=find(bordes_q1);
 hoja_borders(:,1) = [col_q1+(3*size_hoja(2)/4);fil_q1];
 
 % Q3 - En este como en el 2 no hubo problema
-imlin_q3=Hough(im_q3);
-figure();
-idisp(im_q3)
-imlin_q3.houghThresh=0.9; 
-imlin_q3.plot
-imlin_q3.suppress = 15; 
-figure();
-idisp(im_q3)
-imlin_q3.plot
-lineas_q3=imlin_q3.lines;
+% imlin_q3=Hough(im_q3);
+% figure();
+% idisp(im_q3)
+% imlin_q3.houghThresh=0.9; 
+% imlin_q3.plot
+% imlin_q3.suppress = 15; 
+% figure();
+% idisp(im_q3)
+% imlin_q3.plot
+% lineas_q3=imlin_q3.lines;
+% 
+% imlinea1_q3=generarlinea(lineas_q3(1).rho,lineas_q3(1).theta,size(im_q3,2),size(im_q3,1));
+% imlinea2_q3=generarlinea(lineas_q3(2).rho,lineas_q3(2).theta,size(im_q3,2),size(im_q3,1));
+% 
+% figure();
+% idisp(im_q3.*imlinea1_q3+im_q3.*imlinea2_q3)
+% 
+% bordes_q3=(imlinea1_q3+imlinea2_q3)==2;
+% [fil_q3,col_q3]=find(bordes_q3);
+[fil_q3,col_q3] = get_Q_border(im_q3);
 
-imlinea1_q3=generarlinea(lineas_q3(1).rho,lineas_q3(1).theta,size(im_q3,2),size(im_q3,1));
-imlinea2_q3=generarlinea(lineas_q3(2).rho,lineas_q3(2).theta,size(im_q3,2),size(im_q3,1));
-
-figure();
-idisp(im_q3.*imlinea1_q3+im_q3.*imlinea2_q3)
-
-bordes_q3=(imlinea1_q3+imlinea2_q3)==2;
-[fil_q3,col_q3]=find(bordes_q3);
 hoja_borders(:,3) = [col_q3;fil_q3+(size_hoja(1)/2)];
 
 % Q4 - Achique el cuadrante nuevamente pq me tomaba el triangulo
-imlin_q4=Hough(im_q4);
-figure();
-idisp(im_q4)
-imlin_q4.houghThresh=0.8; % Tambien lo baje pq no encontraba en la otra direccion
-imlin_q4.plot
-imlin_q4.suppress = 15; % Nota que si ya hay una sola de cada, no hace efecto
-figure();
-idisp(im_q4)
-imlin_q4.plot
-lineas_q4=imlin_q4.lines;
+% imlin_q4=Hough(im_q4);
+% figure();
+% idisp(im_q4)
+% imlin_q4.houghThresh=0.85; % Tambien lo baje pq no encontraba en la otra direccion
+% imlin_q4.plot
+% imlin_q4.suppress = 15; % Nota que si ya hay una sola de cada, no hace efecto
+% figure();
+% idisp(im_q4)
+% imlin_q4.plot
+% lineas_q4=imlin_q4.lines;
+% 
+% imlinea1_q4=generarlinea(lineas_q4(1).rho,lineas_q4(1).theta,size(im_q4,2),size(im_q4,1));
+% imlinea2_q4=generarlinea(lineas_q4(2).rho,lineas_q4(2).theta,size(im_q4,2),size(im_q4,1));
+% 
+% figure();
+% idisp(im_q4.*imlinea1_q4+im_q4.*imlinea2_q4)
+% 
+% bordes_q4=(imlinea1_q4+imlinea2_q4)==2;
+% [fil_q4,col_q4]=find(bordes_q4);
 
-imlinea1_q4=generarlinea(lineas_q4(1).rho,lineas_q4(1).theta,size(im_q4,2),size(im_q4,1));
-imlinea2_q4=generarlinea(lineas_q4(2).rho,lineas_q4(2).theta,size(im_q4,2),size(im_q4,1));
+[fil_q4,col_q4] = get_Q_border(im_q4);
 
-figure();
-idisp(im_q4.*imlinea1_q4+im_q4.*imlinea2_q4)
-
-bordes_q4=(imlinea1_q4+imlinea2_q4)==2;
-[fil_q4,col_q4]=find(bordes_q4);
 hoja_borders(:,4) = [col_q4+(3*size_hoja(2)/4);fil_q4+(3*size_hoja(1)/4)];
 
 % Redondeo
