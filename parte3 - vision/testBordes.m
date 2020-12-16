@@ -101,7 +101,7 @@ matH_b=homography(posi_b,posf_b);
 warped_b=homwarp(matH_b,warpedth,'full');
 warpedth_b=warped_b>0.5;
 idisp(warpedth_b)
-close all;
+% close all
 
 %% Recorto la hoja (provisorio hecho a mano)
 im_hoja = warpedth_b(557:1641,346:1716);
@@ -114,12 +114,15 @@ idisp(im_hoja)
 size_hoja=size(im_hoja);
 
 %% Buscar lineas de bordes posta
-% Separo en cuadrantes (menos probable que mire el triangulo)
+% Separo en cuadrantes
 im_q1 = im_hoja(1:(size_hoja(1)/4),(3*size_hoja(2)/4):size_hoja(2));
 im_q2 = im_hoja(1:(size_hoja(1)/2),1:(size_hoja(2)/2));
 im_q3 = im_hoja((size_hoja(1)/2):size_hoja(1),1:(size_hoja(2)/2));
 im_q4 = im_hoja((3*size_hoja(1)/4):size_hoja(1),(3*size_hoja(2)/4):size_hoja(2));
-
+% Vi que se puede con blobs (para Ari): 
+% - Si hay dos, es solo el fondo y la esquina
+% - Si hay mas de dos, hay alguna parte del triangulo y hay que achicar el
+% cuadrante (ir recortando a la mitad del anterior)
 hoja_borders = [0 0 0 0;0 0 0 0];
 
 
@@ -222,12 +225,59 @@ hoja_borders = round(hoja_borders);
 posf_hoja=[size_hoja(2) 1 1 size_hoja(2);1 1 size_hoja(1) size_hoja(1)]; 
 
 matH_h=homography(hoja_borders,posf_hoja);
-warped_h=homwarp(matH_h,warp_hoja,'full');
+warped_h=homwarp(matH_h,im_hoja,'full');
 warpedth_h=warped_h>0.5;
+% warpedth_h = ~warpedth_h;
 idisp(warpedth_h)
-close all
-% Focus de la hoja (provisorio manual)
+% close all
+% Focus de la hoja (Fixed)
 size_hoja_final = size(warpedth_h);
-hoja_final = warpedth_h(120:size_hoja_final(1),292:size_hoja_final(2));
+
+th_base = 1;
+num_of_lines = 0;
+while(num_of_lines < 7)
+    th_base = th_base - 0.05;
+    imlin_final=Hough(warpedth_h);
+    imlin_final.houghThresh=th_base; 
+    imlin_final.suppress = 15; 
+    lineas_final=imlin_final.lines;
+    num_of_lines = size(lineas_final);
+    num_of_lines = num_of_lines(2);
+end
+figure();
+idisp(warpedth_h)
+imlin_final.plot
+% Dejo las del recuadro solamente
+% (despues puedo usar las del triangulo encontrando las intersecciones
+% sacandoles el offset despues)
+cont = 1;
+for k=1:1:7
+    if(abs(lineas_final(k).theta) > 1.5) % Pi/2
+        lineas_recuadro(cont) = lineas_final(k);
+        cont = cont+1;
+    end
+    if(abs(lineas_final(k).theta) < 0.01) % 0
+        lineas_recuadro(cont) = lineas_final(k);
+        cont = cont+1;
+    end
+end
+% Generar lineas de prueba recuadro
+imlinea1_f=generarlinea(lineas_recuadro(1).rho,lineas_recuadro(1).theta,size(warpedth_h,2),size(warpedth_h,1));
+imlinea2_f=generarlinea(lineas_recuadro(2).rho,lineas_recuadro(2).theta,size(warpedth_h,2),size(warpedth_h,1));
+imlinea3_f=generarlinea(lineas_recuadro(3).rho,lineas_recuadro(3).theta,size(warpedth_h,2),size(warpedth_h,1));
+imlinea4_f=generarlinea(lineas_recuadro(4).rho,lineas_recuadro(4).theta,size(warpedth_h,2),size(warpedth_h,1));
+
+figure();
+idisp(warpedth_h.*imlinea1_f+warpedth_h.*imlinea2_f+warpedth_h.*imlinea3_f+warpedth_h.*imlinea4_f)
+
+bordescartel_f=(imlinea1_f+imlinea2_f+imlinea3_f+imlinea4_f)==2;
+[fil_f,col_f]=find(bordescartel_f);
+
+pos_border = order_points(col_f,fil_f,size_hoja_final(2),size_hoja_final(1));
+
+hoja_final = warpedth_h(pos_border(2,1):pos_border(2,3),pos_border(1,2):pos_border(1,1));
 figure();
 idisp(hoja_final)
+
+
+
