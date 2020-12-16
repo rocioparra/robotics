@@ -4,60 +4,32 @@ close all
 clc
 
 % Cargo imagen original
-im_orig=iread('cuadro.jpg','double'); 
-im_aux=iread('cuadro.jpg','double','grey');
+im_orig=iread('cuadro2.jpg','double'); 
+im_aux=iread('cuadro2.jpg','double','grey');
 imth = im_aux>0.5;
 figure();
-idisp(imth)
+idisp(im_aux)
+
+% (Para Ari) cuadro2 habria que hacerla con codigo metiendo la original en 
+% una plantilla que sea toda negra, y 20 pixeles por lado mas grande cosa
+% de tener 4 margenes
 
 im_size=size(im_aux);
+% Genero template para quedarme con la hoja
+for i=1:1:im_size(1)
+    for j=1:1:im_size(2)
+        if(im_aux(i,j) == 0)
+            im_template(i,j) = 0;
+        else
+            im_template(i,j) = 1;
+        end
+    end
+end
 
-% Deteccion de bordes hoja
-im_marco = icanny(im_orig,1,0.4,1);
-figure();
-idisp(im_marco)
+% Se warpea la hoja de trabajo primero
+warpedth = get_hoja(im_template,imth);
 
-% Identificacion de lineas
-imlin=Hough(im_marco);
-figure();
-idisp(im_marco)
-imlin.houghThresh=0.65;
-imlin.plot
-imlin.suppress = 10;
-figure();
-idisp(im_marco)
-imlin.plot
-lineas=imlin.lines;
-
-% Generar lineas de prueba
-imlinea1=generarlinea(lineas(1).rho,lineas(1).theta,size(im_marco,2),size(im_marco,1));
-imlinea2=generarlinea(lineas(2).rho,lineas(2).theta,size(im_marco,2),size(im_marco,1));
-figure();
-idisp(im_marco.*imlinea1+im_marco.*imlinea2)
-
-figure();
-bordescartel=(imlinea1+imlinea2)==2;
-idisp(bordescartel)
-
-[fil,col]=find(bordescartel);
-posi=zeros(2,4);
-posi(1,1)=1;
-posi(2,1)=1110;
-posi(1,2)=fil;
-posi(2,2)=col;
-posi(1,3)=748;
-posi(2,3)=1;
-posi(1,4)=748;
-posi(2,4)=1110;
-
-posf=[1 1 748 748;1110 1 1 1110];
-% Con esto la llevo bordes al plano
-matH=homography(posi,posf);
-warped=homwarp(matH,imth,'full');
-warpedth=warped>0.5;
-idisp(warpedth)
-
-% Enderezamos ahora
+%% Enderezamos ahora la hoja
 im_marco_b = icanny(warpedth,1,0.4,1);
 figure();
 idisp(im_marco_b)
@@ -66,9 +38,9 @@ idisp(im_marco_b)
 imlin_b=Hough(im_marco_b);
 figure();
 idisp(im_marco_b)
-imlin_b.houghThresh=0.4;
+imlin_b.houghThresh=0.3;
 imlin_b.plot
-imlin_b.suppress = 10;
+imlin_b.suppress = 15;
 figure();
 idisp(im_marco_b)
 imlin_b.plot
