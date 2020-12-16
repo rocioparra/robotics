@@ -90,11 +90,11 @@ posi_b=zeros(2,4);
 posi_b(2,:)=fil_b;
 posi_b(1,:)=col_b;
 
-aux_size = size(bordescartel_b);
 % Ordenado de los puntos en estructura C
-posi_b = order_points(posi_b(1,:),posi_b(2,:),aux_size(2),aux_size(1));
+posi_b = order_points(posi_b(1,:),posi_b(2,:),1381,1100);
 
-posf_b=[aux_size(2) 1 1 aux_size(2);1 1 aux_size(1) aux_size(1)]; 
+% Esto deberia ser el tamaño de bordescartel
+posf_b=[1381 1 1 1381;1 1 1100 1100]; 
 
 % Con esto la llevo bordes al plano
 matH_b=homography(posi_b,posf_b);
@@ -103,21 +103,36 @@ warpedth_b=warped_b>0.5;
 idisp(warpedth_b)
 % close all
 
-%% Recorto la hoja
+%% Recorto la hoja (provisorio hecho a mano)
 im_front = icanny(warpedth_b,1,0.4,1);
 figure();
 idisp(im_front)
 
-im_hoja = focus_hoja_crop(im_front,warpedth_b); % Con crop de bordes feos
-tam = size(im_hoja);
+im_hoja = focus_hoja(im_front,warpedth_b);
+tam = 
+im_hoja = im_hoja()
+% figure();
+% idisp(im_test)
 
+% print_lines = Hough(im_front);
+% print_lines.houghThresh = 0.4;
+% print_lines.suppress = 15;
+% figure();
+% idisp(warpedth_b)
+% print_lines.plot
+
+%%%%%%%%%%%%%
+% im_hoja = warpedth_b(557:1641,346:1716);
+% warp_hoja = im_hoja;
+% figure();
+% idisp(warp_hoja)
 im_hoja = ~im_hoja;
 figure();
 idisp(im_hoja)
 size_hoja=size(im_hoja);
 
 %% Buscar lineas de bordes posta
-% Separo en cuadrantes (provisorio)
+% Separo en cuadrantes
 im_q1 = im_hoja(1:(size_hoja(1)/4),(3*size_hoja(2)/4):size_hoja(2));
 im_q2 = im_hoja(1:(size_hoja(1)/2),1:(size_hoja(2)/2));
 im_q3 = im_hoja((size_hoja(1)/2):size_hoja(1),1:(size_hoja(2)/2));
@@ -161,7 +176,7 @@ idisp(warpedth_h)
 % close all
 
 %% Focus de la hoja (Fixed)
-hoja_final = focus_hoja(warpedth_h,warpedth_h);
+hoja_final = focus_hoja(warpedth_h);
 figure();
 idisp(hoja_final)
 

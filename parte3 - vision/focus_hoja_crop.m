@@ -1,4 +1,4 @@
-function focused = focus_hoja(hoja_plana,hoja_toFocus)
+function focused = focus_hoja_crop(hoja_plana,hoja_toFocus)
 % FOCUS_HOJA toma la hoja ya plana y focusea el recuadro
 % - Recibe la hoja plana para usar con fondo negro y resto lineas blanco
 % - Recibe hoja a la que quiero aplicar el focus (puede ser distinta)
@@ -45,5 +45,17 @@ bordescartel_f = (imlinea1_f+imlinea2_f+imlinea3_f+imlinea4_f)==2;
 [fil_f,col_f] = find(bordescartel_f);
 
 pos_border = order_points(col_f,fil_f,size_hoja_final(2),size_hoja_final(1));
+
+pos_border(1,1) = pos_border(1,1)-5;
+pos_border(2,1) = pos_border(2,1)+5;
+
+pos_border(1,2) = pos_border(1,2)+5;
+pos_border(2,2) = pos_border(2,2)+5;
+
+pos_border(1,3) = pos_border(1,3)+5;
+pos_border(2,3) = pos_border(2,3)-5;
+
+pos_border(1,4) = pos_border(1,4)-5;
+pos_border(2,4) = pos_border(2,4)-5;
 
 focused = hoja_toFocus(pos_border(2,1):pos_border(2,3),pos_border(1,2):pos_border(1,1));
