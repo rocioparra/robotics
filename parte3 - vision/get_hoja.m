@@ -42,7 +42,8 @@ posf = [size_temp(2) 1 1 size_temp(2);1 1 size_temp(1) size_temp(1)];
 
 matH = homography(posi,posf);
 warped = homwarp(matH,im_dest,'full');
-warpedth = warped>0.5;
+warped(isnan(warped)) = 0;
+warpedth = warped;
 figure();
 idisp(warpedth)
 
