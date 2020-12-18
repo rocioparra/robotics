@@ -11,8 +11,9 @@ while(line_qty < 2)
     base_th = base_th-0.05;
     imlin_q = Hough(im_q);
     imlin_q.houghThresh = base_th;
-    imlin_q.suppress = 15;
-    lineas_q = imlin_q.lines; % Pero las de strenght=1 no me sirven
+    imlin_aux = imlin_q.lines;
+    % imlin_q.suppress = 15;
+    lineas_q = imlin_q.lines; % Pero las de strenght = 1 no me sirven
     lineas_q = lineas_q(lineas_q.strength ~= 1);
     % Tengo que filtrar por mayores a pi/4 o menores
     % Si logro que haya al menos una de cada ya esta
@@ -24,7 +25,7 @@ while(line_qty < 2)
 end
 figure();
 idisp(im_q)
-lineas_A(1).plot
+lineas_A(1).plot % Las primeras son las de mayor strength
 lineas_B(1).plot
 
 imlinea1_q = generarlinea(lineas_A(1).rho,lineas_A(1).theta,size(im_q,2),size(im_q,1));

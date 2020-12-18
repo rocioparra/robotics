@@ -7,11 +7,11 @@ clc
 % - No esta rotada mas de 45°
 % - No hay vertices dentro del cuadrado que define cada esquina de 20*20
 % - Las esquinas no estan pegadas al borde de la hoja
-% - No usar imagenes de 12M -> Pierde precision
+% 
 
 % Cargo imagen original
-im_orig=iread('cuadro5.jpg','double'); 
-im_aux=iread('cuadro5.jpg','double','grey');
+im_orig=iread('cuadro4.jpg','double'); 
+im_aux=iread('cuadro4.jpg','double','grey');
 imth = im_aux>0.5;
 figure();
 idisp(im_aux)
@@ -35,50 +35,52 @@ im_front = icanny(im_front,1,0.4,1);
 figure();
 idisp(im_front)
 
-im_hoja = focus_hoja(im_front,warpedth,1);
+im_hoja = focus_hoja(im_front,warpedth);
 tam = size(im_hoja);
 figure();
 idisp(im_hoja)
 
+size_hoja=size(im_hoja);
+im_hoja(1,:) = 0;
+im_hoja(:,size_hoja(2)) = 0;
+im_hoja(size_hoja(1),:) = 0;
+im_hoja(:,1) = 0;
+
 im_hoja = im_hoja>0.5;
 im_hoja = ~im_hoja;
-
-size_hoja=size(im_hoja);
-im_hoja(1:5,:) = 0;
-im_hoja(:,(size_hoja(2)-5):size_hoja(2)) = 0;
-im_hoja((size_hoja(1)-5):size_hoja(1),:) = 0;
-im_hoja(:,1:5) = 0;
-
 figure();
 idisp(im_hoja)
 
-im_hoja_closed = im_hoja;
+% Enmarco el borde con negro
+im_hoja_aux = im_hoja;
 
-% % Enmarco el borde con negro
-% im_hoja_aux = im_hoja;
-% 
-% % Cierro borde para que el warp no lo arrastre
-% figure();
-% idisp(im_hoja)
-% S = kcircle(1);
-% im_hoja_closed = ~iclose(~im_hoja_aux,S);
-% figure();
-% idisp(im_hoja_closed)
-% 
-% figure();
-% idisp(im_hoja_closed)
-% 
-% S = [0 1 0;0 1 0;0 1 0];
-% im_hoja_closed = ~iclose(~im_hoja_closed,~S);
-% figure();
-% idisp(im_hoja_closed)
+% Cierro borde para que el warp no lo arrastre
+figure();
+idisp(im_hoja)
+S = kcircle(2);
+im_hoja_closed = ~iclose(~im_hoja_aux,S);
+figure();
+idisp(im_hoja_closed)
+
+im_hoja_closed(1:5,:) = 0;
+im_hoja_closed(:,(size_hoja(2)-5):size_hoja(2)) = 0;
+im_hoja_closed((size_hoja(1)-5):size_hoja(1),:) = 0;
+im_hoja_closed(:,1:5) = 0;
+
+figure();
+idisp(im_hoja_closed)
+
+S = [0 1 0;0 1 0;0 1 0];
+im_hoja_closed = ~iclose(~im_hoja_closed,~S);
+figure();
+idisp(im_hoja_closed)
 
 close all
 %% Buscar lineas de bordes posta
 % Separo en cuadrantes (provisorio)
 im_q1 = im_hoja_closed(1:(size_hoja(1)/4),(3*size_hoja(2)/4):size_hoja(2));
 im_q2 = im_hoja_closed(1:(size_hoja(1)/2),1:(size_hoja(2)/3));
-im_q3 = im_hoja_closed((3*size_hoja(1)/4):size_hoja(1),1:(size_hoja(2)/3));
+im_q3 = im_hoja_closed((size_hoja(1)/2):size_hoja(1),1:(size_hoja(2)/2));
 im_q4 = im_hoja_closed((3*size_hoja(1)/4):size_hoja(1),(3*size_hoja(2)/4):size_hoja(2));
 % Se puede con blobs (para Ari): 
 % - Si hay hasta parent 1 listo
@@ -97,7 +99,7 @@ hoja_borders(:,2) = [col_q2;fil_q2]; % Recordar que va u - v
 
 % Q3
 [fil_q3,col_q3] = get_Q_border(im_q3);
-hoja_borders(:,3) = [col_q3;fil_q3+(3*size_hoja(1)/4)];
+hoja_borders(:,3) = [col_q3;fil_q3+(size_hoja(1)/2)];
 
 % Q4
 [fil_q4,col_q4] = get_Q_border(im_q4);
@@ -118,7 +120,7 @@ figure();
 idisp(warpedth_h)
 
 %% Focus de la hoja
-hoja_final = focus_hoja(warpedth_h,warpedth_h,0);
+hoja_final = focus_hoja(warpedth_h,warpedth_h);
 figure();
 idisp(hoja_final)
 

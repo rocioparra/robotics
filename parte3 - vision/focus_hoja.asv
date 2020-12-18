@@ -15,27 +15,13 @@ while(num_of_lines < 2)
     lineas_final = imlin_final.lines;
     lineas_A = lineas_final(abs(lineas_final.theta) > 1.5);
     lineas_B = lineas_final(abs(lineas_final.theta) < 0.05);
-    if(~crop)
-        A_M = (lineas_A.rho > (size_hoja_final(2)/2));
-        A_M = A_M(2);
-        A_m = (lineas_A.rho < (size_hoja_final(2)/2));
-        A_m = A_m(2);
-        A = A_m && A_M;
-        B_M = (lineas_B.rho > (size_hoja_final(1)/2));
-        B_M = B_M(2);
-        B_m = (lineas_B.rho < (size_hoja_final(1)/2));
-        B_m = B_m(2);
-        B = B_m && B_M;
-        num_of_lines = A+B;
-    else
-        A = size(lineas_A);
-        A = A(2);
-        A = A>=2;
-        B = size(lineas_B);
-        B = B(2);
-        B = B>=2;
-        num_of_lines = A+B;
-    end
+    A = size(lineas_A);
+    A = A(2);
+    A = A>=2;
+    B = size(lineas_B);
+    B = B(2);
+    B = B>=2;
+    num_of_lines = A+B;
 end
 
 % Dejo las del recuadro solamente
