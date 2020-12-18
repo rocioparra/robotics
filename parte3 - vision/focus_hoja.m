@@ -16,16 +16,18 @@ while(num_of_lines < 2)
     lineas_A = lineas_final(abs(lineas_final.theta) > 1.5);
     lineas_B = lineas_final(abs(lineas_final.theta) < 0.05);
     if(~crop)
-        A_M = (lineas_A.rho > (size_hoja_final(2)/2));
-        A_M = A_M(2);
-        A_m = (lineas_A.rho < (size_hoja_final(2)/2));
-        A_m = A_m(2);
+        lineasA_M = find(abs(lineas_A.rho) > (size_hoja_final(2)/2),1);
+        A_M = ~isempty(lineasA_M);
+        lineasA_m = find(abs(lineas_A.rho) < (size_hoja_final(2)/2),1);
+        A_m = ~isempty(lineasA_m);
         A = A_m && A_M;
-        B_M = (lineas_B.rho > (size_hoja_final(1)/2));
-        B_M = B_M(2);
-        B_m = (lineas_B.rho < (size_hoja_final(1)/2));
-        B_m = B_m(2);
+        
+        lineasB_M = find(abs(lineas_B.rho) > (size_hoja_final(1)/2),1);
+        B_M = ~isempty(lineasB_M);
+        lineasB_m = find(abs(lineas_B.rho) < (size_hoja_final(1)/2),1);
+        B_m = ~isempty(lineasB_m);
         B = B_m && B_M;
+        
         num_of_lines = A+B;
     else
         A = size(lineas_A);
