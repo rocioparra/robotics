@@ -10,8 +10,8 @@ clc
 % - No usar imagenes de 12M -> Pierde precision
 
 % Cargo imagen original
-im_orig=iread('cuadro5.jpg','double'); 
-im_aux=iread('cuadro5.jpg','double','grey');
+im_orig=iread('cuadro2.jpg','double'); 
+im_aux=iread('cuadro2.jpg','double','grey');
 imth = im_aux>0.5;
 figure();
 idisp(im_aux)
@@ -24,7 +24,7 @@ im_template = generate_template(im_aux);
 warpedth = get_hoja(im_template,im_aux);
 
 im_size = size(warpedth);
-close all
+% close all
 %% Recorto la hoja
 im_front = generate_template(warpedth);
 im_front = icanny(im_front,1,0.4,1);
@@ -88,7 +88,6 @@ hoja_borders(:,4) = [col_q4+col4;fil_q4+fil4];
 
 % Redondeo
 hoja_borders = round(hoja_borders);
-hoja_borders
 figure();
 idisp(im_hoja_closed)
 
@@ -110,4 +109,5 @@ idisp(hoja_final)
 
 %% Extraigo puntos del triangulo
 [fil_tri,col_tri] = get_triangle(hoja_final);
-[fil_tri,col_tri]
+
+% Relacion de la hoja: 20cm x 15cm
