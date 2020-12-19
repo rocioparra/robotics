@@ -77,7 +77,7 @@ close all
 %% Buscar lineas de bordes posta
 % Separo en cuadrantes (provisorio)
 im_q1 = im_hoja_closed(1:(size_hoja(1)/4),(3*size_hoja(2)/4):size_hoja(2));
-im_q2 = im_hoja_closed(1:(size_hoja(1)/2),1:(size_hoja(2)/3));
+im_q2 = im_hoja_closed(1:(size_hoja(1)/2),1:(size_hoja(2)/4));
 im_q3 = im_hoja_closed((3*size_hoja(1)/4):size_hoja(1),1:(size_hoja(2)/3));
 im_q4 = im_hoja_closed((3*size_hoja(1)/4):size_hoja(1),(3*size_hoja(2)/4):size_hoja(2));
 % Se puede con blobs (para Ari): 

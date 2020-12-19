@@ -25,9 +25,52 @@ while(line_qty < 3)
 end
 imlin_tri.plot;
 
-imlinea1_tri = generarlinea(lineas_tri(1).rho,lineas_tri(1).theta,size_f(2),size_f(1));
-imlinea2_tri = generarlinea(lineas_tri(2).rho,lineas_tri(2).theta,size_f(2),size_f(1));
-imlinea3_tri = generarlinea(lineas_tri(3).rho,lineas_tri(3).theta,size_f(2),size_f(1));
+delta = 0;
+number_of_pts = 0;
 
-bordes_tri = (imlinea1_tri+imlinea2_tri+imlinea3_tri)==2;
-[fil_tri,col_tri] = find(bordes_tri);
+while(number_of_pts ~= 3)
+    % Genero las lineas para el warping
+    imlinea1_tri = generarlinea(lineas_tri(1).rho,lineas_tri(1).theta+delta,size_f(2),size_f(1));
+    imlinea2_tri = generarlinea(lineas_tri(2).rho,lineas_tri(2).theta+delta,size_f(2),size_f(1));
+    imlinea3_tri = generarlinea(lineas_tri(3).rho,lineas_tri(3).theta+delta,size_f(2),size_f(1));
+
+    bordes_tri = (imlinea1_tri+imlinea2_tri+imlinea3_tri)==2;
+    [fil_t,col_t] = find(bordes_tri);
+    
+    normas = round(sqrt(fil_t.^2 + col_t.^2));
+    tam_norm = size(normas);
+    tam_norm = tam_norm(1);
+    point_redundante = zeros(tam_norm,1);
+    cont = 1;
+    
+    for i=1:1:(tam_norm-1)
+        aux_norm = normas(i);
+        for j=i:1:(tam_norm-1)
+            if(abs(aux_norm-normas(j+1)) < 2)
+                point_redundante(cont) = i;
+                cont = cont +1;
+            end
+        end
+    end
+    cont = 1;
+    for i=1:1:tam_norm
+        if(i ~= point_redundante)
+            fil_tt(cont) = fil_t(i);
+            col_tt(cont) = col_t(i);
+            cont = cont +1;
+        end
+    end
+    number_of_pts = size(fil_tt);
+    number_of_pts = number_of_pts(2);
+    
+    if(number_of_pts ~= 3)
+        % La quedo tengo que reajustar
+        delta = delta + 0.001;
+    end
+end
+
+fil_tri = fil_tt;
+col_tri = col_tt;
+end
+
+

@@ -1,4 +1,4 @@
-ifunction template = generate_template(im_byn)
+function template = generate_template(im_byn)
 % GENERATE_TEMPLATE mediante identificacion de blobs se busca el poligono
 % que represente la hoja, y se genera una mascara en base al mismo
 
@@ -23,3 +23,4 @@ im_recuadro = im_blobs2(k);
 template = poly2mask(im_recuadro.edge(1,:),im_recuadro.edge(2,:),im_size(1),im_size(2));
 figure();
 idisp(template)
+end
