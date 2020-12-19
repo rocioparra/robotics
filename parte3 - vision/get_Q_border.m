@@ -32,3 +32,4 @@ imlinea1_q = generarlinea(lineas_A(1).rho,lineas_A(1).theta,size(im_q,2),size(im
 imlinea2_q = generarlinea(lineas_B(1).rho,lineas_B(1).theta,size(im_q,2),size(im_q,1));
 bordes_q = (imlinea1_q+imlinea2_q)==2;
 [fil_q,col_q] = find(bordes_q);
+end

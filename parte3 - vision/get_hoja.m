@@ -24,18 +24,54 @@ while(border_lines < 4)
 end
 imlin_temp.plot
 
-% Genero las lineas para el warping
-imlinea1=generarlinea(lineas(1).rho,lineas(1).theta,size(template,2),size(template,1));
-imlinea2=generarlinea(lineas(2).rho,lineas(2).theta,size(template,2),size(template,1));
-imlinea3=generarlinea(lineas(3).rho,lineas(3).theta,size(template,2),size(template,1));
-imlinea4=generarlinea(lineas(4).rho,lineas(4).theta,size(template,2),size(template,1));
+delta = 0;
+number_of_pts = 0;
 
-bordescartel_t = (imlinea1+imlinea2+imlinea3+imlinea4)==2;
-[fil_t,col_t] = find(bordescartel_t);
+while(number_of_pts ~= 4)
+    % Genero las lineas para el warping
+    imlinea1=generarlinea(lineas(1).rho,lineas(1).theta+delta,size(template,2),size(template,1));
+    imlinea2=generarlinea(lineas(2).rho,lineas(2).theta+delta,size(template,2),size(template,1));
+    imlinea3=generarlinea(lineas(3).rho,lineas(3).theta+delta,size(template,2),size(template,1));
+    imlinea4=generarlinea(lineas(4).rho,lineas(4).theta+delta,size(template,2),size(template,1));
+
+    bordescartel_t = (imlinea1+imlinea2+imlinea3+imlinea4)==2;
+    [fil_t,col_t] = find(bordescartel_t);
+
+    normas = round(sqrt(fil_t.^2 + col_t.^2));
+    tam_norm = size(normas);
+    tam_norm = tam_norm(1);
+    point_redundante = zeros(tam_norm,1);
+    cont = 1;
+
+    for i=1:1:(tam_norm-1)
+        aux_norm = normas(i);
+        for j=i:1:(tam_norm-1)
+            if(abs(aux_norm-normas(j+1)) < 2)
+                point_redundante(cont) = i;
+                cont = cont +1;
+            end
+        end
+    end
+    cont = 1;
+    for i=1:1:tam_norm
+        if(i ~= point_redundante)
+            fil_tt(cont) = fil_t(i);
+            col_tt(cont) = col_t(i);
+            cont = cont +1;
+        end
+    end
+    number_of_pts = size(fil_tt);
+    number_of_pts = number_of_pts(2);
+
+    if(number_of_pts ~= 4)
+        % La quedo tengo que reajustar
+        delta = delta + 0.001;
+    end
+end
 
 posi = zeros(2,4);
-posi(2,:) = fil_t;
-posi(1,:) = col_t;
+posi(2,:) = fil_tt;
+posi(1,:) = col_tt;
 
 posi = order_points(posi(1,:),posi(2,:),size_temp(2),size_temp(1));
 posf = [size_temp(2) 1 1 size_temp(2);1 1 size_temp(1) size_temp(1)];
@@ -48,3 +84,4 @@ figure();
 idisp(warpedth)
 
 warped_img = warpedth;
+end

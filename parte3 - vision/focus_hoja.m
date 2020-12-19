@@ -99,3 +99,4 @@ if(crop)
 end
 
 focused = hoja_toFocus(pos_border(2,1):pos_border(2,3),pos_border(1,2):pos_border(1,1));
+end
