@@ -8,7 +8,7 @@ function new_image = get_quadrant(image,zone)
     
     %obtengo los bordes del cuadrante
     borders=get_smaller_rect(1,u_max,1,v_max,zone);
-    borders=round(borders);
+    borders=floor(borders);
     %obtengo la sub imagen 
     
     new_image=image(borders(2,1):borders(2,4),borders(1,1):borders(1,4));
