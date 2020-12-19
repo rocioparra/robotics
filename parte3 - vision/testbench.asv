@@ -46,11 +46,12 @@ bordersd=get_smaller_rect(z4ix,z4ox,z4iy,z4oy,4);
 rxd=bordersd(1,:);
 ryd=bordersd(2,:);
 
-%%testeo meterlo en zona 4 y 1 
+%%testeo meterlo en todos las zonas para obtener rectangulos mas chicos lo
+%%unico que hay que cambiar es la zona
 ti=[bordersc(:,1)];
 tf=[bordersc(:,4)];
 
-borderse=get_smaller_rect(ti(1),tf(1),ti(2),tf(2),4);
+borderse=get_smaller_rect(ti(1),tf(1),ti(2),tf(2),2);
 
 rxe=borderse(1,:);
 rye=borderse(2,:);
@@ -63,7 +64,9 @@ plot(rxc,ryc,'*')
 plot(rxd,ryd,'*')
 plot(rxe,rye,'*')
 
+mat=ones(150,200);
 
+matb=
 
 
 

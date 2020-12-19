@@ -1,4 +1,4 @@
-function template = generate_template(im_byn)
+ifunction template = generate_template(im_byn)
 % GENERATE_TEMPLATE mediante identificacion de blobs se busca el poligono
 % que represente la hoja, y se genera una mascara en base al mismo
 
