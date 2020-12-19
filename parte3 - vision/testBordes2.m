@@ -2,7 +2,7 @@
 clear all
 close all
 clc
-% Asumsiones:
+% Asumsiones generales:
 % - Bordes negros
 % - No esta rotada mas de 45°
 % - No hay vertices dentro del cuadrado que define cada esquina de 20*20
@@ -10,8 +10,8 @@ clc
 % - No usar imagenes de 12M -> Pierde precision
 
 % Cargo imagen original
-im_orig=iread('cuadro5.jpg','double'); 
-im_aux=iread('cuadro5.jpg','double','grey');
+im_orig=iread('cuadro4.jpg','double'); 
+im_aux=iread('cuadro4.jpg','double','grey');
 imth = im_aux>0.5;
 figure();
 idisp(im_aux)
@@ -44,10 +44,10 @@ im_hoja = im_hoja>0.5;
 im_hoja = ~im_hoja;
 
 size_hoja=size(im_hoja);
-im_hoja(1:5,:) = 0;
-im_hoja(:,(size_hoja(2)-5):size_hoja(2)) = 0;
-im_hoja((size_hoja(1)-5):size_hoja(1),:) = 0;
-im_hoja(:,1:5) = 0;
+im_hoja(1:2,:) = 0;
+im_hoja(:,(size_hoja(2)-2):size_hoja(2)) = 0;
+im_hoja((size_hoja(1)-2):size_hoja(1),:) = 0;
+im_hoja(:,1:2) = 0;
 
 figure();
 idisp(im_hoja)
@@ -122,5 +122,6 @@ hoja_final = focus_hoja(warpedth_h,warpedth_h,0);
 figure();
 idisp(hoja_final)
 
-% Otra para Ari: con Hough ubicar los puntos del triangulo y pasar a cm
-
+%% Extraigo puntos del triangulo
+[fil_tri,col_tri] = get_triangle(hoja_final);
+[fil_tri,col_tri]
