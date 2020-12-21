@@ -23,6 +23,8 @@ while(line_qty < 2)
     B = ~isempty(lineas_B);
     line_qty = A+B;
 end
+% Puede que una de las primeras sea una linea del borde
+% Para asegurar tengo que verificar que pasa por los puntos blancos
 figure();
 idisp(im_q)
 lineas_A(1).plot % Las primeras son las de mayor strength

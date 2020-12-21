@@ -40,22 +40,6 @@ while(num_of_lines < 2)
     end
 end
 
-% Dejo las del recuadro solamente
-% (despues puedo usar las del triangulo encontrando las intersecciones
-% sacandoles el offset despues)
-% cont = 1;
-% 
-% for k=1:1:7
-%     if(abs(lineas_final(k).theta) > 1.5) % ~Pi/2
-%         lineas_recuadro(cont) = lineas_final(k);
-%         cont = cont+1;
-%     end
-%     if(abs(lineas_final(k).theta) < 0.1) % ~0
-%         lineas_recuadro(cont) = lineas_final(k);
-%         cont = cont+1;
-%     end
-% end
-
 aux = lineas_A;
 [~,kM] = max(abs(lineas_A.rho));
 [~,km] = min(abs(lineas_A.rho));

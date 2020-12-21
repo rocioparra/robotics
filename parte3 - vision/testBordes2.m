@@ -3,7 +3,7 @@ clear all
 close all
 clc
 % Asumsiones generales:
-% - Bordes negros
+% - Fondo negro
 % - No esta rotada mas de 45°
 % - No hay vertices dentro del cuadrado que define cada esquina de 20*20
 % - Las esquinas no estan pegadas al borde de la hoja
@@ -111,3 +111,7 @@ idisp(hoja_final)
 [fil_tri,col_tri] = get_triangle(hoja_final);
 
 % Relacion de la hoja: 20cm x 15cm
+size_f = size(hoja_final);
+x = col_tri.*20./size_f(2); % En cm
+y = fil_tri.*15./size_f(1); % En cm
+
