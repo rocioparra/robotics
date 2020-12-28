@@ -9,11 +9,12 @@ alpha = [ 0     pi/2    0                   0   pi/2 ];
 a =     [ 0     0       sqrt(L1a^2+L1b^2)   L2  0    ];
 d =     [ L0    0       0                   0   L3   ];
 theta_offset = [0, 0, 0, pi/2, 0];
+qlim = [ 0, 180; 0, 180; 0, 180; 0, 180; 0, 180;]; % TODO
 
 Links = Link.empty(5,0);
 for i=1:length(alpha)
     L = Link('alpha', alpha(i), 'a', a(i), 'd', d(i), 'modified', ...
-        'offset', theta_offset(i));
+        'offset', theta_offset(i), 'qlim', qlim(i, :));
     Links(i) = L;
 end
 Robot = SerialLink(Links);
