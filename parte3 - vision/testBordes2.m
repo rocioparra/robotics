@@ -1,17 +1,18 @@
-%% Test Parte 3 - Vision
+%% Parte 3 - Vision
 clear all
 close all
 clc
 % Asumsiones generales:
 % - Fondo negro
-% - No esta rotada mas de 45°
+% - No esta rotada mas de 45° -> Sino se puede confundir la rotacion
+% original
 % - No hay vertices dentro del cuadrado que define cada esquina de 20*20
 % - Las esquinas no estan pegadas al borde de la hoja
-% - No usar imagenes de 12M -> Pierde precision
+% - No usar imagenes de 12M (muy grandes) -> Pierde precision y tarda mil
 
 % Cargo imagen original
-im_orig=iread('cuadro2.jpg','double'); 
-im_aux=iread('cuadro2.jpg','double','grey');
+im_orig=iread('cuadro5.jpg','double'); 
+im_aux=iread('cuadro5.jpg','double','grey');
 imth = im_aux>0.5;
 figure();
 idisp(im_aux)
