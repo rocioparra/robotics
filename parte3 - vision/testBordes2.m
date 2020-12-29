@@ -113,6 +113,6 @@ idisp(hoja_final)
 
 % Relacion de la hoja: 20cm x 15cm
 size_f = size(hoja_final);
-x = col_tri.*20./size_f(2); % En cm
-y = fil_tri.*15./size_f(1); % En cm
+x = col_tri.*0.20./size_f(2); % En cm
+y = fil_tri.*0.15./size_f(1); % En cm
 

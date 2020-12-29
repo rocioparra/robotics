@@ -42,12 +42,14 @@ end
 
 % get trajectory
 traj = double.empty(0, Robot.n);
-T_last = transl([targets(1, :) 0])*trotz(atan2(targets(1, 2), targets(1, 1)));    
+% T_last = transl([targets(1, :) 0])*trotz(atan2(targets(1, 2), targets(1, 1))); 
+T_last = transl([targets(1, :) 0]); 
 for i=2:length(targets)
     p = targets(i, :);
-    T = transl([p 0])*trotz(atan2(p(2), p(1)));    
-
-    traj = [traj; Robot.ikcon(ctraj(T_last, T, points_per_side(i-1)))];
+    % T = transl([p 0])*trotz(atan2(p(2), p(1)));    
+    T = transl([p 0]);  
+    
+    traj = [traj; Robot.ikine(ctraj(T_last, T, points_per_side(i-1)),'mask', [1 1 1 0 0 0])];
     T_last = T;
 end
 
