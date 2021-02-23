@@ -106,7 +106,7 @@ idisp(warpedth_h)
 hoja_final = focus_hoja(warpedth_h,warpedth_h,0);
 figure();
 idisp(hoja_final)
-
+close all
 %% Extraigo puntos del triangulo
 [fil_tri,col_tri] = get_triangle(hoja_final);
 
@@ -114,5 +114,5 @@ idisp(hoja_final)
 size_f = size(hoja_final);
 x = col_tri.*0.20./size_f(2); % En m
 y = fil_tri.*0.15./size_f(1); % En m
-close all
+
 end

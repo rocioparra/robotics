@@ -52,14 +52,17 @@ q0 = [0 0 0 0 0];
 % Robot.plot(q0);
 
 % Referencia de la mesa: x0 = 350 , y0 = 100
-x_ref = [0.350 0.100 0]; % Donde pusimos la mesa
+x0 = 0.350;
+y0 = 0.1;
+x_ref = [x0 y0 0]; % Donde pusimos la mesa
 T_ref = transl(x_ref);
 q_ref = Robot.ikine(T_ref, [0 0 0 0 0], 'mask', [1 1 1 0 0 0]);
 
 % Prueba (OK)
 % x_base es la mesa respecto a la terna base
-x_base = [0.375 0.100;0.375 -0.100;0.225 -0.100;0.375 0.100];
-mesa_ref = [0.375 0.100];
+r = 0.075;
+x_base = [x0+r y0;x0+r -y0;x0-r -y0;x0+r y0];
+mesa_ref = [x0+r y0];
 
 % Obtengo triangulo de ejemplo desde imagen
 [x_tri, y_tri] = vision_get_tri('cuadro5.jpg');
@@ -72,14 +75,19 @@ tri_cord = [x_tri_f' y_tri_f';x_tri_f(1) y_tri_f(1)];
 
 % Generacion de trayectoria
 traj = traj_gen(Robot, tri_cord, 30);
+trajXYZ = Robot.fkine(traj);
 size_traj = size(traj);
 size_traj = size_traj(1);
 
+figure();
 Robot.plot(q_ref) % Hasta aca todo bien
-plot_box(0.375,-0.1,0.375-0.15,0.1,'linewidth', 3) % Mesa de 15x20
+plot_box(x0+r,-y0,x0-r,y0,'linewidth', 3) % Mesa de 15x20
 
 % Ploteo de trayectoria
 for i=1:size_traj
     Robot.plot(traj(i,:));
+    hold on;
+    aux = trajXYZ(i);
+    plot3(aux.t(1),aux.t(2),aux.t(3),'b.','MarkerSize', 3 );
     pause(0.2);
 end
