@@ -48,11 +48,11 @@ for i=1:N
 end
 Robot_p = SerialLink(Links_p,'name', 'Trossen_p');
 
-% Referencia de la mesa: x0 = 300 , y0 = 100
 q0 = [0 0 0 0 0];
 % Robot.plot(q0);
 
-x_ref = [0.300 0.100 0]; % Donde pusimos la mesa
+% Referencia de la mesa: x0 = 350 , y0 = 100
+x_ref = [0.350 0.100 0]; % Donde pusimos la mesa
 T_ref = transl(x_ref);
 q_ref = Robot.ikine(T_ref, [0 0 0 0 0], 'mask', [1 1 1 0 0 0]);
 
@@ -61,7 +61,7 @@ q_ref = Robot.ikine(T_ref, [0 0 0 0 0], 'mask', [1 1 1 0 0 0]);
 x_base = [0.375 0.100;0.375 -0.100;0.225 -0.100;0.375 0.100];
 mesa_ref = [0.375 0.100];
 
-% Triangulo de ejemplo desde imagen
+% Obtengo triangulo de ejemplo desde imagen
 [x_tri, y_tri] = vision_get_tri('cuadro5.jpg');
 
 % Refiero las coordenadas a la terna base
@@ -78,6 +78,7 @@ size_traj = size_traj(1);
 Robot.plot(q_ref) % Hasta aca todo bien
 plot_box(0.375,-0.1,0.375-0.15,0.1,'linewidth', 3) % Mesa de 15x20
 
+% Ploteo de trayectoria
 for i=1:size_traj
     Robot.plot(traj(i,:));
     pause(0.2);

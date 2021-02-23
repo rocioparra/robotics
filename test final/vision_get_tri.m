@@ -73,8 +73,6 @@ hoja_borders = [0 0 0 0;0 0 0 0];
 % Q1
 [fil_q1,col_q1] = get_Q_border(im_q1);
 hoja_borders(:,1) = [col_q1+col1;fil_q1+fil1];
-% Los offset salen de la funcion que tiene que hacer Ari, 
-% junto con los cuadrantes
 
 % Q2
 [fil_q2,col_q2] = get_Q_border(im_q2);
